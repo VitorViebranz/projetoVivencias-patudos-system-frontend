@@ -1,12 +1,41 @@
-function Input({ label, ...props }) {
+import styled from "../../styles/styled";
+import { fieldControlStyles } from "../../styles/primitives";
+
+const FieldStack = styled.div`
+  & {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+`;
+
+const Label = styled.label`
+  & {
+    font-size: 0.875rem;
+    color: #475569;
+  }
+`;
+
+const InputControl = styled.input`
+  ${fieldControlStyles}
+`;
+
+const HelperText = styled.span`
+  & {
+    font-size: 0.75rem;
+    color: var(--app-muted);
+  }
+`;
+
+function Input({ helperText, id, label, name, ...props }) {
+  const fieldId = id || name;
+
   return (
-    <div className="flex flex-col gap-1">
-      <label className="text-sm text-gray-500">{label}</label>
-      <input
-        className="border rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-yellow-400"
-        {...props}
-      />
-    </div>
+    <FieldStack>
+      {label && <Label htmlFor={fieldId}>{label}</Label>}
+      <InputControl id={fieldId} name={name} {...props} />
+      {helperText && <HelperText>{helperText}</HelperText>}
+    </FieldStack>
   );
 }
 

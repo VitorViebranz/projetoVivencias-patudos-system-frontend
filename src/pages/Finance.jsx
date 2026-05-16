@@ -4,12 +4,27 @@ import StatCard from "../components/dashboard/StatCard";
 import FinanceChartFilter from "../components/finance/FinanceChartFilter";
 import FinanceLineChart from "../components/finance/FinanceLineChart";
 import Button from "../components/ui/Button";
+import Input from "../components/ui/Input";
+import Select from "../components/ui/Select";
+import Modal from "../components/ui/Modal";
 import { DollarSign, TrendingUp, TrendingDown, Plus } from "lucide-react";
-import { Link } from "react-router-dom";
 
 function Finance() {
   const [selectedRange, setSelectedRange] = useState("trimestre");
   const [selectedYear, setSelectedYear] = useState("2024");
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [formData, setFormData] = useState({ type: "", amount: "", date: "", description: "" });
+
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCreateSubmit = (event) => {
+    event.preventDefault();
+    console.log("Nova transacao:", formData);
+    setIsCreateOpen(false);
+  };
 
   const yearOptions = ["2024", "2025", "2026"];
 
@@ -108,21 +123,24 @@ function Finance() {
 
   return (
     <PageContainer>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Financeiro</h1>
-        <Link to="/finance/add" className="bg-yellow-400 text-black px-4 py-2 rounded-xl hover:bg-yellow-500 transition-colors inline-flex items-center">
-          <Plus className="w-4 h-4 mr-2" />
-          Adicionar Finança
-        </Link>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-semibold">Financeiro</h1>
+          <p className="mt-1 text-sm text-slate-500">Acompanhe entradas, saidas e fluxo de caixa.</p>
+        </div>
+        <Button onClick={() => setIsCreateOpen(true)}>
+          <Plus className="h-4 w-4" />
+          Adicionar Financa
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+      <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatCard title="Entradas" value="R$ 45.200,00" subtitle="+15%" icon={TrendingUp} color="green" />
-        <StatCard title="Saídas" value="R$ 32.800,00" subtitle="+8%" icon={TrendingDown} color="red" />
+        <StatCard title="Saidas" value="R$ 32.800,00" subtitle="+8%" icon={TrendingDown} color="red" />
         <StatCard title="Lucro" value="R$ 12.400,00" subtitle="+22%" icon={DollarSign} color="blue" />
       </div>
 
-      <div className="mb-6">
+      <div className="mt-6">
         <FinanceChartFilter
           selectedRange={selectedRange}
           onRangeChange={setSelectedRange}
@@ -133,23 +151,84 @@ function Finance() {
         <FinanceLineChart data={chartData} />
       </div>
 
-      <div className="bg-white rounded-2xl p-4 border border-amber-400">
-        <h2 className="text-xl font-semibold mb-4">Transações Recentes</h2>
-        <div className="space-y-2">
-          <div className="flex justify-between items-center py-2 border-b">
-            <span>Doação - João Silva</span>
-            <span className="text-green-600">+R$ 500,00</span>
+      <div className="surface-card mt-6 rounded-3xl p-5">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Transacoes Recentes</h2>
+          <span className="text-xs text-slate-500">Hoje</span>
+        </div>
+        <div className="mt-4 space-y-3">
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
+            <span>Doacao - Joao Silva</span>
+            <span className="font-medium text-emerald-600">+R$ 500,00</span>
           </div>
-          <div className="flex justify-between items-center py-2 border-b">
-            <span>Compra de Ração</span>
-            <span className="text-red-600">-R$ 1.200,00</span>
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
+            <span>Compra de racao</span>
+            <span className="font-medium text-rose-600">-R$ 1.200,00</span>
           </div>
-          <div className="flex justify-between items-center py-2 border-b">
-            <span>Adoption Fee - Luna</span>
-            <span className="text-green-600">+R$ 300,00</span>
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
+            <span>Taxa de adocao - Luna</span>
+            <span className="font-medium text-emerald-600">+R$ 300,00</span>
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+        title="Nova transacao"
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setIsCreateOpen(false)}>
+              Cancelar
+            </Button>
+            <Button type="submit" form="finance-create-form">Salvar</Button>
+          </>
+        }
+      >
+        <form id="finance-create-form" onSubmit={handleCreateSubmit} className="grid gap-4 sm:grid-cols-2">
+          <div className="sm:col-span-2">
+            <Select
+              label="Tipo"
+              name="type"
+              value={formData.type}
+              onChange={handleFormChange}
+              required
+            >
+              <option value="">Selecione</option>
+              <option value="income">Receita</option>
+              <option value="expense">Despesa</option>
+            </Select>
+          </div>
+          <Input
+            label="Valor (R$)"
+            name="amount"
+            type="number"
+            step="0.01"
+            value={formData.amount}
+            onChange={handleFormChange}
+            placeholder="0,00"
+            required
+          />
+          <Input
+            label="Data"
+            name="date"
+            type="date"
+            value={formData.date}
+            onChange={handleFormChange}
+            required
+          />
+          <div className="sm:col-span-2">
+            <Input
+              label="Descricao"
+              name="description"
+              value={formData.description}
+              onChange={handleFormChange}
+              placeholder="Descreva a transacao"
+              required
+            />
+          </div>
+        </form>
+      </Modal>
     </PageContainer>
   );
 }

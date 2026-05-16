@@ -5,7 +5,7 @@ import { Bone, PawPrint } from "lucide-react";
 
 function Login() {
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100 relative overflow-hidden">
+    <div className="app-shell relative flex min-h-screen items-center justify-center overflow-hidden px-4">
 
       {/* BACKGROUND DECORATIVO */}
       <div className="absolute inset-0 pointer-events-none">
@@ -34,11 +34,11 @@ function Login() {
       </div>
 
       {/* CARD */}
-      <div className="bg-white p-8 rounded-2xl w-96 shadow relative z-10">
+      <div className="surface-card relative z-10 w-full max-w-md rounded-3xl p-8">
 
         {/* LOGO */}
         <div className="flex justify-center mb-4">
-          <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-50">
             <img
               src="/patudos-logo.png"
               alt="Logo"
@@ -47,20 +47,20 @@ function Login() {
           </div>
         </div>
 
-        <h1 className="text-2xl font-bold text-center mb-2">
-          Patudos da Rua
-        </h1>
+        <h1 className="text-center text-2xl font-semibold">Patudos da Rua</h1>
 
-        <p className="text-center text-gray-500 mb-6">
-          Bem-vindo outra vez!
+        <p className="mt-2 text-center text-sm text-slate-500">
+          Bem-vindo outra vez. Acesse o painel de operacoes.
         </p>
 
-        <Input label="Usuário" placeholder="Insira seu nome..." />
-        <Input label="Senha" type="password" placeholder="Insira sua senha..." />
+        <div className="mt-6 space-y-4">
+          <Input label="Usuario" placeholder="Insira seu nome..." />
+          <Input label="Senha" type="password" placeholder="Insira sua senha..." />
+        </div>
 
-        <Button className="w-full mt-4">Entrar</Button>
+        <Button className="mt-6 w-full">Entrar</Button>
 
-        <p className="text-center text-sm mt-4 text-gray-400">
+        <p className="mt-4 text-center text-xs text-slate-400">
           Patudos System - v1.0 (ALPHA)
         </p>
       </div>

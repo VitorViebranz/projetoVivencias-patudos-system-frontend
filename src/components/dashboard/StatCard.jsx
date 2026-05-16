@@ -1,35 +1,90 @@
 import Card from "../ui/Card";
+import styled from "../../styles/styled";
+
+const colorStyles = {
+  blue: { background: "#e0f2fe", color: "#0369a1" },
+  green: { background: "#dcfce7", color: "#15803d" },
+  yellow: { background: "#fef3c7", color: "#b45309" },
+  purple: { background: "#f3e8ff", color: "#7e22ce" },
+  red: { background: "#ffe4e6", color: "#be123c" }
+};
+
+const StatCardRoot = styled(Card)`
+  & {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+`;
+
+const Content = styled.div`
+  & {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+`;
+
+const Title = styled.p`
+  & {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+`;
+
+const Value = styled.h2`
+  & {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1;
+    color: #0f172a;
+  }
+`;
+
+const Subtitle = styled.p`
+  & {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #15803d;
+  }
+`;
+
+const IconWrap = styled.div`
+  & {
+    display: flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    background: ${({ $background }) => $background};
+    color: ${({ $color }) => $color};
+  }
+`;
 
 function StatCard({ title, value, subtitle, icon: Icon, color = "blue" }) {
-
-  const colorStyles = {
-    blue: "bg-blue-100 text-blue-600",
-    green: "bg-green-100 text-green-600",
-    yellow: "bg-yellow-100 text-yellow-600",
-    purple: "bg-purple-100 text-purple-600",
-    red: "bg-red-100 text-red-600"
-  };
+  const iconStyle = colorStyles[color] || colorStyles.blue;
 
   return (
-    <Card>
-      <div className="flex items-center justify-between">
+    <StatCardRoot>
+      <Content>
+        <Title>{title}</Title>
+        <Value>{value}</Value>
+        {subtitle && <Subtitle>{subtitle}</Subtitle>}
+      </Content>
 
-        {/* TEXTO */}
-        <div className="flex flex-col gap-1">
-          <p className="text-sm text-gray-500">{title}</p>
-          <h2 className="text-2xl font-bold leading-none">{value}</h2>
-          {/* {subtitle && (
-            <p className="text-sm text-green-500">{subtitle}</p>
-          )} */}
-        </div>
-
-        {/* ÍCONE */}
-        <div className={`p-3 rounded-xl ${colorStyles[color]}`}>
-          {Icon && <Icon size={20} />}
-        </div>
-
-      </div>
-    </Card>
+      <IconWrap $background={iconStyle.background} $color={iconStyle.color}>
+        {Icon && <Icon size={20} />}
+      </IconWrap>
+    </StatCardRoot>
   );
 }
 

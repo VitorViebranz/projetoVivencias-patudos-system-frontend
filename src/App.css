@@ -1,4 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
+
+:root {
+  --app-bg: #f6f4ef;
+  --app-surface: #ffffff;
+  --app-surface-muted: #f3f1ec;
+  --app-border: #e6e1d8;
+  --app-ink: #1d1b16;
+  --app-muted: #6c6a63;
+  --app-accent: #d97706;
+  --app-accent-weak: rgba(217, 119, 6, 0.18);
+  --app-accent-strong: #b45309;
+}
+
+body {
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color: var(--app-ink);
+  background: var(--app-bg);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.app-shell {
+  background:
+    radial-gradient(900px 520px at 18% -12%, var(--app-accent-weak), transparent 60%),
+    radial-gradient(700px 420px at 92% 0%, rgba(56, 189, 248, 0.12), transparent 55%),
+    var(--app-bg);
+}
+
+.surface-card {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  box-shadow: 0 8px 24px rgba(30, 41, 59, 0.06);
+}
+
+.muted-text {
+  color: var(--app-muted);
+}
 
 /* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
@@ -6,15 +52,15 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f3f4f6; /* gray-100 */
+  background: #efece6;
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #fbbf24; /* yellow-400 */
+  background: #e8b26a;
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #f59e0b; /* yellow-500 */
+  background: #d1944f;
 }

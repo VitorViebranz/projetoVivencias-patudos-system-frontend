@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageContainer from '../components/layout/PageContainer';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import ButtonLink from '../components/ui/ButtonLink';
+import Select from '../components/ui/Select';
 import { ArrowLeft, Save } from 'lucide-react';
 
 function FinanceForm() {
@@ -38,18 +40,17 @@ function FinanceForm() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Tipo</label>
-              <select
+              <Select
+                label="Tipo"
                 name="type"
                 value={formData.type}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                 required
               >
                 <option value="">Selecione</option>
                 <option value="income">Receita</option>
                 <option value="expense">Despesa</option>
-              </select>
+              </Select>
             </div>
             <Input
               label="Valor (R$)"
@@ -81,9 +82,7 @@ function FinanceForm() {
           />
 
           <div className="flex justify-end gap-4">
-            <Link to="/finance">
-              <Button className="bg-gray-300 hover:bg-gray-400 text-gray-700">Cancelar</Button>
-            </Link>
+            <ButtonLink to="/finance" variant="secondary">Cancelar</ButtonLink>
             <Button type="submit">
               <Save className="w-4 h-4 mr-2" />
               Salvar Transação

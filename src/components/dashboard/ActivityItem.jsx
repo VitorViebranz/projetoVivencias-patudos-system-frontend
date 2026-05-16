@@ -1,9 +1,36 @@
- function ActivityItem({ title, time }) {
+import styled from "../../styles/styled";
+
+const Row = styled.div`
+  & {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0.75rem 0;
+    font-size: 0.875rem;
+  }
+`;
+
+const Title = styled.p`
+  & {
+    margin: 0;
+    color: #1e293b;
+  }
+`;
+
+const Time = styled.span`
+  & {
+    color: #64748b;
+  }
+`;
+
+function ActivityItem({ title, time }) {
   return (
-    <div className="flex justify-between border-b border-amber-400 py-3">
-      <p>{title}</p>
-      <span className="text-gray-400 text-sm">{time}</span>
-    </div>
+    <Row>
+      <Title>{title}</Title>
+      <Time>{time}</Time>
+    </Row>
   );
 }
 

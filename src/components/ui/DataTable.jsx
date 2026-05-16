@@ -1,85 +1,122 @@
-import React from 'react';
-import { Mars, Venus, ShieldCheck, ShieldX } from "lucide-react";
+import styled from "../../styles/styled";
+import { surfaceCardStyles } from "../../styles/primitives";
 
-const DataTable = ({ columns, data, actions, type }) => {
-  const renderCell = (col, value, row) => {
-    if (type === 'animals' && col.key === 'gender') {
-      return (
-        <div className="flex items-center gap-2">
-          {value === 'Macho' ? <Mars className="w-4 h-4 text-blue-500" /> : <Venus className="w-4 h-4 text-pink-500" />}
-          {value}
-        </div>
-      );
-    }
-    if (type === 'animals' && col.key === 'dewormed') {
-      return (
-        <div className="flex items-center gap-2">
-          {value === 'Vermifugado' ? <ShieldCheck className="w-4 h-4 text-green-500" /> : <ShieldX className="w-4 h-4 text-red-500" />}
-          {value}
-        </div>
-      );
-    }
-    if (type === 'animals' && col.key === 'status') {
-      const statusColors = {
-        "Saudável": "bg-green-200 text-green-800",
-        "Exame": "bg-orange-200 text-orange-800",
-        "Cirurgia": "bg-purple-100 text-purple-700",
-        "Adotado": "bg-gray-300 text-gray-700"
-      };
-      return (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[value] || 'bg-gray-100 text-gray-700'}`}>
-          {value}
-        </span>
-      );
-    }
-    if (type === 'animals' && col.key === 'temperament') {
-      const temperamentColors = {
-        "Dócil": "bg-green-100 text-green-700",
-        "Calmo": "bg-blue-100 text-blue-700",
-        "Normal": "bg-yellow-100 text-yellow-700",
-        "Agressivo": "bg-red-100 text-red-700"
-      };
-      return (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${temperamentColors[value] || 'bg-gray-100 text-gray-700'}`}>
-          {value}
-        </span>
-      );
-    }
-    return value;
-  };
+const TableWrapper = styled.div`
+  ${surfaceCardStyles}
+  & {
+    overflow-x: auto;
+    border-radius: 1.5rem;
+  }
+`;
 
-  return (
-    <div className="overflow-x-auto bg-white shadow-md rounded-2xl max-h-96 overflow-y-auto custom-scrollbar">
-      <table className="min-w-full">
-        <thead className="bg-yellow-50 sticky top-0 z-10">
-          <tr>
-            {columns.map((col, index) => (
-              <th key={index} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {col.label}
-              </th>
-            ))}
-            {actions && <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>}
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="hover:bg-yellow-50 transition-colors">
-              {columns.map((col, colIndex) => (
-                <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {renderCell(col, row[col.key], row)}
-                </td>
-              ))}
-              {actions && (
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  {actions(row)}
-                </td>
-              )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+const Table = styled.table`
+  & {
+    min-width: 100%;
+    border-collapse: collapse;
+  }
+`;
+
+const TableHead = styled.thead`
+  & {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(254, 243, 199, 0.7);
+    backdrop-filter: blur(8px);
+  }
+`;
+
+const HeaderCell = styled.th`
+  & {
+    padding: 0.875rem 1.5rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+  }
+`;
+
+const Body = styled.tbody`
+  & > tr + tr {
+    border-top: 1px solid #e2e8f0;
+  }
+`;
+
+const Row = styled.tr`
+  &:hover {
+    background: rgba(254, 243, 199, 0.6);
+  }
+`;
+
+const Cell = styled.td`
+  & {
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    color: #0f172a;
+    vertical-align: middle;
+  }
+`;
+
+const EmptyCell = styled.td`
+  & {
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+`;
+
+const resolveRowKey = (row, rowIndex, rowKey) => {
+  if (typeof rowKey === "function") {
+    return rowKey(row, rowIndex);
+  }
+
+  return row?.[rowKey] ?? rowIndex;
 };
+
+const DataTable = ({
+  actions,
+  columns,
+  data,
+  emptyMessage = "Sem registros",
+  rowKey = "id",
+  tableClassName = ""
+}) => (
+  <TableWrapper className={tableClassName}>
+    <Table>
+      <TableHead>
+        <tr>
+          {columns.map((column) => (
+            <HeaderCell key={column.key || column.label}>
+              {column.label}
+            </HeaderCell>
+          ))}
+          {actions && <HeaderCell>Acoes</HeaderCell>}
+        </tr>
+      </TableHead>
+      <Body>
+        {data.length === 0 && (
+          <tr>
+            <EmptyCell colSpan={columns.length + (actions ? 1 : 0)}>
+              {emptyMessage}
+            </EmptyCell>
+          </tr>
+        )}
+        {data.map((row, rowIndex) => (
+          <Row key={resolveRowKey(row, rowIndex, rowKey)}>
+            {columns.map((column) => (
+              <Cell key={column.key || column.label} className={column.className}>
+                {column.render ? column.render(row[column.key], row) : row[column.key]}
+              </Cell>
+            ))}
+            {actions && <Cell>{actions(row)}</Cell>}
+          </Row>
+        ))}
+      </Body>
+    </Table>
+  </TableWrapper>
+);
 
 export default DataTable;

@@ -1,99 +1,191 @@
 import { Mars, Venus, ShieldCheck, ShieldX } from "lucide-react";
 import AnimalImage from "./AnimalImage";
+import Card from "../ui/Card";
+import styled from "../../styles/styled";
 
-function AnimalCard({ name, breed, gender, temperament, dewormed, status, age, image }) {
+const AGE_STYLES = {
+  Filhote: { background: "#ede9fe", color: "#6d28d9" },
+  Adulto: { background: "#e0e7ff", color: "#4338ca" },
+  Idoso: { background: "#e2e8f0", color: "#475569" }
+};
 
-  const getAgeLabel = () => {
-  if (!age) return null;
+const TEMPERAMENT_STYLES = {
+  "Dócil": { background: "#dcfce7", color: "#15803d" },
+  Calmo: { background: "#e0f2fe", color: "#0369a1" },
+  Normal: { background: "#fef3c7", color: "#b45309" },
+  Agressivo: { background: "#ffe4e6", color: "#be123c" }
+};
 
-  if (age < 1) return "Filhote";
-  if (age < 7) return "Adulto";
+const STATUS_STYLES = {
+  "Saudável": { background: "#dcfce7", color: "#166534" },
+  Exame: { background: "#ffedd5", color: "#c2410c" },
+  Cirurgia: { background: "#f3e8ff", color: "#7e22ce" },
+  Adotado: { background: "#e2e8f0", color: "#475569" }
+};
+
+const AnimalCardRoot = styled(Card)`
+  & {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.1);
+  }
+`;
+
+const ImageSlot = styled.div`
+  & {
+    width: 8rem;
+    height: 8rem;
+    flex-shrink: 0;
+  }
+`;
+
+const Content = styled.div`
+  & {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+`;
+
+const Header = styled.div`
+  & {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+`;
+
+const Name = styled.h2`
+  & {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+`;
+
+const Breed = styled.p`
+  & {
+    margin: 0.35rem 0 0;
+    font-size: 0.875rem;
+    color: var(--app-muted);
+  }
+`;
+
+const StatusBadge = styled.span`
+  & {
+    border-radius: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: ${({ $background }) => $background};
+    color: ${({ $color }) => $color};
+  }
+`;
+
+const Badges = styled.div`
+  & {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+`;
+
+const Badge = styled.span`
+  & {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 0.75rem;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+    background: ${({ $background }) => $background};
+    color: ${({ $color }) => $color};
+  }
+`;
+
+const getAgeLabel = (age) => {
+  if (age == null || age === "") {
+    return null;
+  }
+
+  if (age < 1) {
+    return "Filhote";
+  }
+
+  if (age < 7) {
+    return "Adulto";
+  }
+
   return "Idoso";
 };
 
-const ageLabel = getAgeLabel();
-
-const ageColors = {
-  "Filhote": "bg-purple-100 text-purple-700",
-  "Adulto": "bg-indigo-100 text-indigo-700",
-  "Idoso": "bg-gray-200 text-gray-700"}  
-
-
+function AnimalCard({ name, breed, gender, temperament, dewormed, status, age, image }) {
+  const ageLabel = getAgeLabel(age);
+  const ageStyle = AGE_STYLES[ageLabel];
   const isMale = gender === "Macho";
   const isDewormed = dewormed === "Vermifugado";
-
-  const temperamentColors = {
-    "Dócil": "bg-green-100 text-green-700",
-    "Calmo": "bg-blue-100 text-blue-700",
-    "Normal": "bg-yellow-100 text-yellow-700",
-    "Agressivo": "bg-red-100 text-red-700"
-  };
-
-  const statusColors = {
-    "Saudável": "bg-green-200 text-green-800",
-    "Exame": "bg-orange-200 text-orange-800",
-    "Cirurgia": "bg-purple-100 text-purple-700",
-    "Adotado": "bg-gray-300 text-gray-700"
-  };
+  const genderStyle = isMale
+    ? { background: "#dbeafe", color: "#2563eb" }
+    : { background: "#fce7f3", color: "#db2777" };
+  const dewormingStyle = isDewormed
+    ? { background: "#dcfce7", color: "#15803d" }
+    : { background: "#ffe4e6", color: "#be123c" };
+  const statusStyle = STATUS_STYLES[status] || { background: "#e2e8f0", color: "#475569" };
+  const temperamentStyle = TEMPERAMENT_STYLES[temperament] || { background: "#e2e8f0", color: "#475569" };
 
   return (
-
-    <div className="bg-white shadow-md rounded-2xl p-4 flex flex-row gap-5 hover:shadow-lg transition items-start">
-
-      {/* IMAGEM: */}
-      <div className="w-32 h-32 shrink-0">
+    <AnimalCardRoot>
+      <ImageSlot>
         <AnimalImage src={image} alt={name} />
-      </div>
+      </ImageSlot>
 
-      {/* CONTEÚDO (Lado Direito) */}
-      <div className="flex flex-col gap-2 flex-1">
-        
-        {/* HEADER */}
-        <div className="flex justify-between items-start">
+      <Content>
+        <Header>
           <div>
-            <h2 className="text-lg font-semibold leading-none">{name}</h2>
-            <p className="text-sm text-gray-500 mt-1">{breed}</p>
+            <Name>{name}</Name>
+            <Breed>{breed}</Breed>
           </div>
-
-          <span className={`text-[10px] uppercase font-bold px-2 py-1 rounded-lg ${statusColors[status]}`}>
+          <StatusBadge $background={statusStyle.background} $color={statusStyle.color}>
             {status}
-          </span>
-        </div>
+          </StatusBadge>
+        </Header>
 
-        {/* BADGES */}
-        <div className="flex flex-wrap gap-2 mt-1">
+        <Badges>
+          {ageLabel && (
+            <Badge $background={ageStyle.background} $color={ageStyle.color}>
+              {ageLabel} ({age} {age === 1 ? "ano" : "anos"})
+            </Badge>
+          )}
 
-  {/* IDADE */}
-  {age && (
-    <span className={`text-xs px-2 py-1 rounded-lg ${ageColors[ageLabel]}`}>
-      {ageLabel} ({age} {age === 1 ? "ano" : "anos"})
-    </span>
-  )}
-
-          {/* SEXO */}
-          <span className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg ${
-            isMale ? "bg-blue-100 text-blue-600" : "bg-pink-100 text-pink-600"
-          }`}>
+          <Badge $background={genderStyle.background} $color={genderStyle.color}>
             {isMale ? <Mars size={14} /> : <Venus size={14} />}
             {gender}
-          </span>
+          </Badge>
 
-          {/* TEMPERAMENTO */}
-          <span className={`text-xs px-2 py-1 rounded-lg ${temperamentColors[temperament]}`}>
+          <Badge $background={temperamentStyle.background} $color={temperamentStyle.color}>
             {temperament}
-          </span>
+          </Badge>
 
-          {/* VERMIFUGADO */}
-          <span className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg ${
-            isDewormed ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"
-          }`}>
-            {isDewormed ? <ShieldCheck size={14}/> : <ShieldX size={14}/>}
-            {isDewormed ? "Vermifugado" : "Não Vermifugado"}
-          </span>
-
-        </div>
-      </div>
-    </div>
+          <Badge $background={dewormingStyle.background} $color={dewormingStyle.color}>
+            {isDewormed ? <ShieldCheck size={14} /> : <ShieldX size={14} />}
+            {isDewormed ? "Vermifugado" : "Nao vermifugado"}
+          </Badge>
+        </Badges>
+      </Content>
+    </AnimalCardRoot>
   );
 }
 

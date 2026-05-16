@@ -1,31 +1,25 @@
+import { Link } from "react-router-dom";
 import styled from "../../styles/styled";
 import { buttonBaseStyles, buttonSizeStyles, buttonVariantStyles } from "../../styles/primitives";
 
-const StyledButton = styled.button`
+const StyledLink = styled(Link)`
   ${buttonBaseStyles}
   ${({ $variant = "primary" }) => buttonVariantStyles[$variant] || buttonVariantStyles.primary}
   ${({ $size = "md" }) => buttonSizeStyles[$size] || buttonSizeStyles.md}
 `;
 
-function Button({
-  children,
-  justify = "center",
-  size = "md",
-  type = "button",
-  variant = "primary",
-  ...props
-}) {
+function ButtonLink({ to, children, justify = "center", size = "md", variant = "primary", ...props }) {
   return (
-    <StyledButton
+    <StyledLink
+      to={to}
       $justify={justify}
       $size={size}
       $variant={variant}
-      type={type}
       {...props}
     >
       {children}
-    </StyledButton>
+    </StyledLink>
   );
 }
 
-export default Button;
+export default ButtonLink;

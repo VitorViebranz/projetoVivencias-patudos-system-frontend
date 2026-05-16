@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
@@ -10,6 +9,8 @@ import InventoryForm from '../pages/InventoryForm';
 import FinanceForm from '../pages/FinanceForm';
 import Admin from '../pages/Admin';
 import UserForm from '../pages/UserForm';
+import Profile from '../pages/Profile';
+import Settings from '../pages/Settings';
 
 const AppRouter = () => {
   return (
@@ -25,6 +26,8 @@ const AppRouter = () => {
         <Route path="/finance/add" element={<FinanceForm />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/add" element={<UserForm />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
   );

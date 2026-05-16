@@ -1,14 +1,71 @@
-function FinanceLineChart({ data, title = "Evolução Financeira" }) {
+import Card from "../ui/Card";
+import styled from "../../styles/styled";
+
+const ChartCard = styled(Card)`
+  & {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+`;
+
+const Header = styled.div`
+  & {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+`;
+
+const Title = styled.h3`
+  & {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+`;
+
+const Period = styled.span`
+  & {
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+`;
+
+const EmptyText = styled.p`
+  & {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+`;
+
+const ScrollArea = styled.div`
+  & {
+    overflow-x: auto;
+  }
+`;
+
+const StyledSvg = styled.svg`
+  & {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+`;
+
+function FinanceLineChart({ data, title = "Evolucao Financeira" }) {
   if (!data || !data.length) {
     return (
-      <div className="bg-white rounded-2xl p-4 border border-slate-200">
-        <h3 className="text-lg font-semibold mb-4">{title}</h3>
-        <p className="text-sm text-slate-500">Nenhum dado disponível para o período selecionado.</p>
-      </div>
+      <ChartCard>
+        <Title>{title}</Title>
+        <EmptyText>Nenhum dado disponivel para o periodo selecionado.</EmptyText>
+      </ChartCard>
     );
   }
 
-  const maxValue = Math.max(...data.map((d) => d.value), 1);
+  const maxValue = Math.max(...data.map((item) => item.value), 1);
   const padding = 34;
   const width = 520;
   const height = 260;
@@ -17,6 +74,7 @@ function FinanceLineChart({ data, title = "Evolução Financeira" }) {
   const points = data.map((item, index) => {
     const x = padding + (index * chartWidth) / Math.max(data.length - 1, 1);
     const y = height - padding - (item.value / maxValue) * chartHeight;
+
     return { ...item, x, y };
   });
 
@@ -25,13 +83,13 @@ function FinanceLineChart({ data, title = "Evolução Financeira" }) {
     .join(" ");
 
   return (
-    <div className="bg-white rounded-2xl p-4 border border-slate-200">
-      <div className="flex items-center justify-between mb-4 gap-4">
-        <h3 className="text-lg font-semibold">{title}</h3>
-        <span className="text-sm text-slate-500">Período selecionado</span>
-      </div>
-      <div className="overflow-x-auto">
-        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto max-w-full">
+    <ChartCard>
+      <Header>
+        <Title>{title}</Title>
+        <Period>Periodo selecionado</Period>
+      </Header>
+      <ScrollArea>
+        <StyledSvg viewBox={`0 0 ${width} ${height}`}>
           <defs>
             <linearGradient id="financeLineGradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.8" />
@@ -39,10 +97,11 @@ function FinanceLineChart({ data, title = "Evolução Financeira" }) {
             </linearGradient>
           </defs>
 
-          <g className="text-slate-400 text-[8px]">
+          <g fill="#94a3b8" fontSize="8">
             {Array.from({ length: 4 }).map((_, index) => {
               const y = padding + (chartHeight / 3) * index;
               const labelValue = Math.round(maxValue - (maxValue / 3) * index);
+
               return (
                 <g key={index}>
                   <line x1={padding} y1={y} x2={width - padding} y2={y} stroke="#e2e8f0" strokeWidth="1" />
@@ -54,7 +113,7 @@ function FinanceLineChart({ data, title = "Evolução Financeira" }) {
             })}
           </g>
 
-          <path d={linePath} fill="none" stroke="#0ea5e9" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          <path d={linePath} fill="none" stroke="#0ea5e9" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" />
           <path
             d={`${linePath} L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`}
             fill="url(#financeLineGradient)"
@@ -63,18 +122,18 @@ function FinanceLineChart({ data, title = "Evolução Financeira" }) {
 
           {points.map((point, index) => (
             <g key={index}>
-              <circle cx={point.x} cy={point.y} r="5" fill="#0ea5e9" stroke="#fff" strokeWidth="2" />
-              <text x={point.x} y={point.y - 12} textAnchor="middle" className="text-[8px] fill-slate-700">
+              <circle cx={point.x} cy={point.y} fill="#0ea5e9" r="5" stroke="#fff" strokeWidth="2" />
+              <text x={point.x} y={point.y - 12} textAnchor="middle" fill="#334155" fontSize="8">
                 {point.value.toLocaleString("pt-BR")}
               </text>
-              <text x={point.x} y={height - 12} textAnchor="middle" className="text-[8px] fill-slate-600">
+              <text x={point.x} y={height - 12} textAnchor="middle" fill="#475569" fontSize="8">
                 {point.month}
               </text>
             </g>
           ))}
-        </svg>
-      </div>
-    </div>
+        </StyledSvg>
+      </ScrollArea>
+    </ChartCard>
   );
 }
 

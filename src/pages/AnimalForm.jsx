@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageContainer from '../components/layout/PageContainer';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import ButtonLink from '../components/ui/ButtonLink';
+import Select from '../components/ui/Select';
 import { ArrowLeft, Save } from 'lucide-react';
 
 function AnimalForm() {
@@ -56,66 +58,54 @@ function AnimalForm() {
               placeholder="Digite a raça"
               required
             />
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Gênero</label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                required
-              >
+            <Select
+              label="Genero"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              required
+            >
                 <option value="">Selecione</option>
                 <option value="Macho">Macho</option>
                 <option value="Fêmea">Fêmea</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Temperamento</label>
-              <select
-                name="temperament"
-                value={formData.temperament}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                required
-              >
+            </Select>
+            <Select
+              label="Temperamento"
+              name="temperament"
+              value={formData.temperament}
+              onChange={handleChange}
+              required
+            >
                 <option value="">Selecione</option>
                 <option value="Dócil">Dócil</option>
                 <option value="Calmo">Calmo</option>
                 <option value="Normal">Normal</option>
                 <option value="Agressivo">Agressivo</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Vermifugado</label>
-              <select
-                name="dewormed"
-                value={formData.dewormed}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                required
-              >
+            </Select>
+            <Select
+              label="Vermifugado"
+              name="dewormed"
+              value={formData.dewormed}
+              onChange={handleChange}
+              required
+            >
                 <option value="">Selecione</option>
                 <option value="Vermifugado">Vermifugado</option>
                 <option value="Não vermifugado">Não vermifugado</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-                required
-              >
+            </Select>
+            <Select
+              label="Status"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              required
+            >
                 <option value="">Selecione</option>
                 <option value="Saudável">Saudável</option>
                 <option value="Exame">Exame</option>
                 <option value="Cirurgia">Cirurgia</option>
                 <option value="Adotado">Adotado</option>
-              </select>
-            </div>
+            </Select>
             <Input
               label="Idade"
               name="age"
@@ -128,9 +118,7 @@ function AnimalForm() {
           </div>
 
           <div className="flex justify-end gap-4">
-            <Link to="/animals">
-              <Button className="bg-gray-300 hover:bg-gray-400 text-gray-700">Cancelar</Button>
-            </Link>
+            <ButtonLink to="/animals" variant="secondary">Cancelar</ButtonLink>
             <Button type="submit">
               <Save className="w-4 h-4 mr-2" />
               Salvar Animal

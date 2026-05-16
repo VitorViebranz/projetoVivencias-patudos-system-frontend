@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageContainer from '../components/layout/PageContainer';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import ButtonLink from '../components/ui/ButtonLink';
+import Select from '../components/ui/Select';
 import { ArrowLeft, Save } from 'lucide-react';
 
 function UserForm() {
@@ -54,26 +56,23 @@ function UserForm() {
               required
             />
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Cargo</label>
-              <select
+              <Select
+                label="Cargo"
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
                 required
               >
                 <option value="">Selecione o cargo</option>
                 <option value="Admin">Admin</option>
                 <option value="Funcionário">Funcionário</option>
                 <option value="Voluntário">Voluntário</option>
-              </select>
+              </Select>
             </div>
           </div>
 
           <div className="flex justify-end gap-4">
-            <Link to="/admin">
-              <Button className="bg-gray-300 hover:bg-gray-400 text-gray-700">Cancelar</Button>
-            </Link>
+            <ButtonLink to="/admin" variant="secondary">Cancelar</ButtonLink>
             <Button type="submit">
               <Save className="w-4 h-4 mr-2" />
               Salvar Usuário
